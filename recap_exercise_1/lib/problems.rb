@@ -96,6 +96,13 @@ class String
     # "bootcamp".caesar_cipher(2) #=> "dqqvecor"
     # "zebra".caesar_cipher(4)    #=> "difve"
     def caesar_cipher(num)
-
+        alpha = ("a".."z").to_a
+        ciphered = "" 
+        self.each_char.with_index do |char, i|
+            old_let = alpha.index(char)
+            new_idx = (old_let + num) % 26
+            ciphered += alpha[new_idx] 
+        end
+        ciphered
     end
 end
