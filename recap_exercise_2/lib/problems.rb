@@ -66,13 +66,12 @@ class Array
     #
     # This should remind you of the spaceship operator! Convenient :)
     def bubble_sort(&prc)
-        notSorted = true 
-        prc ||= Proc.new {|ele| ele }
+        notSorted = true
+        prc ||= Proc.new {|ele1, ele2| ele1 <=> ele2 }
         while notSorted
-            notSorted = false    
-            (0...self.length).each do |i|
-                proc_comp = prc.call(self[i]) <=> prc.call(self[i + 1])
-                if proc_comp == 1
+            notSorted = false 
+            (0...self.length - 1).each do |i|
+                if prc.call(self[i], self[i +1]) == 1
                     notSorted = true
                     self[i], self[i + 1] = self[i + 1], self[i]
                 end
