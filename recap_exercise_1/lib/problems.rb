@@ -1,12 +1,23 @@
+require "byebug"
 # Write a method, all_vowel_pairs, that takes in an array of words and returns all pairs of words
 # that contain every vowel. Vowels are the letters a, e, i, o, u. A pair should have its two words
 # in the same order as the original array. 
 #
 # Example:
-#
 # all_vowel_pairs(["goat", "action", "tear", "impromptu", "tired", "europe"])   # => ["action europe", "tear impromptu"]
-def all_vowel_pairs(words)
 
+def all_vowel_pairs(words)
+    vowels = ["a", "e", "i", "o", "u"]
+    pairs = []
+    words.each.with_index do |word1, i1|
+        words.each.with_index do |word2, i2|
+            pairs << [word1, word2] if i2 > i1
+        end
+    end
+    pairs.map! { |pair| "#{pair[0]} #{pair[1]}"}
+    pairs.select do |pair|
+        vowels.all? { |vowel| pair.include?(vowel) }
+    end
 end
 
 
@@ -18,7 +29,7 @@ end
 # composite?(9)     # => true
 # composite?(13)    # => false
 def composite?(num)
-
+    (2...num).any? { |n| num % n == 0 }
 end
 
 
@@ -32,7 +43,7 @@ end
 # find_bigrams("the theater is empty", ["cy", "em", "ty", "ea", "oo"])  # => ["em", "ty", "ea"]
 # find_bigrams("to the moon and back", ["ck", "oo", "ha", "at"])        # => ["ck", "oo"]
 def find_bigrams(str, bigrams)
-
+    bigrams.select { |gram| str.include?(gram)}
 end
 
 class Hash
@@ -50,7 +61,8 @@ class Hash
     # hash_2.my_select { |k, v| k + 1 == v }      # => {10=>11, 5=>6, 7=>8})
     # hash_2.my_select                            # => {4=>4}
     def my_select(&prc)
-
+        prc ||= Proc.new { |k, v| k == v }
+        self.select { |k, v| prc.call(k, v) }
     end
 end
 
@@ -64,7 +76,13 @@ class String
     # "cats".substrings     # => ["c", "ca", "cat", "cats", "a", "at", "ats", "t", "ts", "s"]
     # "cats".substrings(2)  # => ["ca", "at", "ts"]
     def substrings(length = nil)
-
+        subs = []
+        self.each_char.with_index do |char1, idx1|
+            (0...self.length).each do |idx2|
+                subs << self[idx1..idx2] if idx2 >= idx1
+            end
+        end
+        length == nil ? subs : subs.select { |sub| sub.length == length }
     end
 
 
