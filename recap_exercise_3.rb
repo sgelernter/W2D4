@@ -108,3 +108,62 @@ end
 # p vowel_rotate('headphones')    # => "heedphanos"
 # p vowel_rotate('bootcamp')      # => "baotcomp"
 # p vowel_rotate('awesome')       # => "ewasemo"
+
+class String
+    def select(&block)
+        return "" if block == nil 
+        new_string = ""
+        self.each_char do |char|
+            if block.call(char)
+                new_string += char
+            end
+        end
+        new_string
+    end
+
+    def map!(&prc)
+        self.each_char.with_index do |char, i|
+            self[i] = prc.call(char, i)
+        end
+    end
+end
+
+# p "app academy".select { |ch| !"aeiou".include?(ch) }   # => "pp cdmy"
+# p "HELLOworld".select { |ch| ch == ch.upcase }          # => "HELLO"
+# p "HELLOworld".select          # => ""
+
+
+def multiply(a, b)
+    if a < 0 && b < 0
+        a = a*-1
+        b = b*-1
+    elsif b < 0
+        b, a = a, b 
+    end
+    return 0 if b == 0
+    a + multiply(a, b - 1)
+end
+
+# p multiply(3, 5)        # => 15
+# p multiply(5, 3)        # => 15
+# p multiply(2, 4)        # => 8
+# p multiply(0, 10)       # => 0
+# p multiply(-3, -6)      # => 18
+# p multiply(3, -6)       # => -18
+# p multiply(-3, 6)       # => -18
+
+def lucas_sequence(arr)
+    return [] if arr == 0
+    return [2] if arr == 1
+    return [2, 1] if arr == 2
+    arr = lucas_sequence(arr).pop + lucas_sequence(arr - 1)
+end
+
+p lucas_sequence(0)   # => []
+p lucas_sequence(1)   # => [2]    
+p lucas_sequence(2)   # => [2, 1]
+p lucas_sequence(3)   # => [2, 1, 3]
+p lucas_sequence(6)   # => [2, 1, 3, 4, 7, 11]
+p lucas_sequence(8)   # => [2, 1, 3, 4, 7, 11, 18, 29]
+
+
